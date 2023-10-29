@@ -1,19 +1,19 @@
 import { useState } from "react"
 import { StyleSheet, View, TextInput, Text, Button} from "react-native"
 
-export default function LogIn(props) {
+export default function LogIn({navigation}) {
     const [mobile, setMobile] = useState("")
     const [password, setPassword] = useState("")
 
     const userPassword = "1234"
     const userMobile = "9672932853"
 
-
+let LogIn = false
     return (
         <View style={style.logInPage}>
 
      
-            <Text onPress={() => props.navigation.navigate("signup") } style={{color:"blue"}}>Click Here to sign up</Text>
+            <Text onPress={() => navigation.navigate("signup") } style={{color:"blue"}}>Click Here to sign up</Text>
             
 
             <Text>Log in</Text>
@@ -34,7 +34,8 @@ export default function LogIn(props) {
             />
             <Button onPress={
                 mobile === userMobile && password === userPassword ?
-                    () => props.navigation.navigate("home")
+                    () => navigation.push("coustmer")
+                    
                     : console.log("password is incorrect")
             }
                 title="submit"
