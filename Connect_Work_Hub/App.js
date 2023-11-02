@@ -1,9 +1,10 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
- import Worker from './componennts/app/worker';
-  import SignUp from './componennts/auth/signup';
-  import LogIn from './componennts/auth/login';
-import Coustmer from './componennts/app/coustmer';
+ import Worker from './componennts/app/Worker';
+  import SignUp from './componennts/auth/SignUp';
+  import LogIn from './componennts/auth/LogIn';
+import Option from './componennts/app/Option';
+import Customer from './componennts/app/Customer';
 
 
 
@@ -15,7 +16,8 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen name='login'  component={LogIn}/>
         <Stack.Screen name='signup'  component={SignUp}/>
-        <Stack.Screen name='coustmer'  component={Coustmer}  />
+        <Stack.Screen name='option'  component={Option}  />
+        <Stack.Screen name='customer'  component={Customer}  />
         <Stack.Screen name='worker'  component={Worker}  />
  </Stack.Navigator>
         

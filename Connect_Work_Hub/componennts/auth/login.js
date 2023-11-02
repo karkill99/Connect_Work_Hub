@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { StyleSheet, View, TextInput, Text, Button} from "react-native"
+import { CommonActions } from '@react-navigation/native';
 
 export default function LogIn({navigation}) {
     const [mobile, setMobile] = useState("")
@@ -34,7 +35,15 @@ let LogIn = false
             />
             <Button onPress={
                 mobile === userMobile && password === userPassword ?
-                    () => navigation.push("coustmer")
+                    () => {navigation.dispatch(
+                        CommonActions.reset({
+                            index:1,
+                            routes:[
+                                {name:"option"},
+                               
+                            ]
+                        })
+                    )}
                     
                     : console.log("password is incorrect")
             }
