@@ -5,6 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
   import LogIn from './componennts/auth/LogIn';
 import Option from './componennts/app/Option';
 import Customer from './componennts/app/Customer';
+import UserDetails from './componennts/UserDetails/userDetails';
+import UserExperties from './componennts/UserDetails/UserExperties';
 
 
 
@@ -19,6 +21,8 @@ export default function App() {
         <Stack.Screen name='option'  component={Option}  />
         <Stack.Screen name='customer'  component={Customer}  />
         <Stack.Screen name='worker'  component={Worker}  />
+        <Stack.Screen name='userExperties'  component={UserExperties}/>
+        <Stack.Screen name='userDetails'  component={UserDetails}/>
  </Stack.Navigator>
         
  
