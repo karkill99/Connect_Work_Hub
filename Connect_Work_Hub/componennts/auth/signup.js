@@ -2,7 +2,7 @@ import { useState } from "react"
 import { CommonActions } from '@react-navigation/native';
 import { Box, Text, Heading, VStack, FormControl, Input, Link, Button, HStack, Center, NativeBaseProvider, } from "native-base";
 import { Pressable } from "react-native";
-
+import axios from "axios";
 
 export default function SignUp({navigation}){
      const [mobile, setMobile] = useState("")
@@ -10,6 +10,20 @@ export default function SignUp({navigation}){
      const [password, setPassword] = useState("")
      const [rePassword, setRePassword] = useState("")
 
+     const handleSignup = async () => {
+      try {
+        const response = await axios.post('https://connect-hub-backend.onrender.com/auth/signup', {
+         mobile,
+         userName,
+         password,
+         rePassword
+        });
+        console.log('Response:', JSON.stringify( response.mobile));
+        // Handle successful response
+      } catch (error) {
+        console.log(error)
+      }
+    }      
 
     return(
 <NativeBaseProvider>
@@ -56,20 +70,22 @@ export default function SignUp({navigation}){
           </FormControl>
           <Button mt="2" colorScheme="indigo"
           onPress={
-            password === rePassword  ?
-                () => {
-                    navigation.dispatch(
-                        CommonActions.reset({
-                            index: 1,
-                            routes: [
-                                { name: "option" },
 
-                            ]
-                        })
-                    )
-                }
+            handleSignup
+            // password === rePassword  ?
+            //     () => {
+            //         navigation.dispatch(
+            //             CommonActions.reset({
+            //                 index: 1,
+            //                 routes: [
+            //                     { name: "option" },
 
-                : console.log("password is incorrect")
+            //                 ]
+            //             })
+            //         )
+            //     }
+
+            //     : console.log("password is incorrect")
         }
           >
             Sign up
