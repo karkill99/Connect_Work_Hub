@@ -1,29 +1,64 @@
-import { useState } from "react"
-import { CommonActions } from '@react-navigation/native';
+import { useState , useEffect} from "react"
 import { Box, Text, Heading, VStack, FormControl, Input, Link, Button, HStack, Center, NativeBaseProvider, } from "native-base";
 import { Pressable } from "react-native";
+import { CommonActions } from '@react-navigation/native';
 import axios from "axios";
+import { useDispatch } from "react-redux";
 
 export default function SignUp({navigation}){
      const [mobile, setMobile] = useState("")
      const [userName, setUserName] = useState("")
      const [password, setPassword] = useState("")
-     const [rePassword, setRePassword] = useState("")
-
+     const [newUser, setNewUser]= useState(false)
+     const dispatch = useDispatch();
+    //  const [rePassword, setRePassword] = useState("")
+// let userType
+// let name
+// let alternateMobile
+// let address
+// let state
+// let city
+// let pinCode
+// let gender
      const handleSignup = async () => {
       try {
-        const response = await axios.post('https://connect-hub-backend.onrender.com/auth/signup', {
-         mobile,
-         userName,
-         password,
-         rePassword
+        const response = await axios.post('https://connect-hub-backend.onrender.com/auth/signup/step1', {
+        username:userName,
+        password:password,
+        mobile:mobile,
+        // usertype:userType,
+        // name:name,
+        // alternatemobile:alternateMobile,
+        // address:address,
+        // state:state,
+        // city:city,
+        // pinCode:pinCode,
+        // gender:gender
+
         });
-        console.log('Response:', JSON.stringify( response.mobile));
-        // Handle successful response
+        if(response) {
+          dispatch({
+            type: 'SIGNUP_STEP_1',
+            payload: response.data.tempId
+          })
+        }
+        console.log('Response:', response.data);
+        setNewUser(true)
+   
       } catch (error) {
         console.log(error)
       }
     }      
+    useEffect(() => {
+      if (newUser) {
+          navigation.dispatch(
+              CommonActions.reset({
+                  index: 1,
+                  routes: [{ name: "option" }]
+              })
+          );
+      }
+  }, [newUser, navigation]);
 
     return(
 <NativeBaseProvider>
@@ -61,31 +96,31 @@ export default function SignUp({navigation}){
              onChangeText={(e)=> setPassword(e)}
             />
           </FormControl>
-          <FormControl>
+          {/* <FormControl>
             <FormControl.Label>Confirm Password</FormControl.Label>
             <Input type="password" 
             value={rePassword} 
             onChangeText={(e)=> setRePassword(e)}
             />
-          </FormControl>
+          </FormControl> */}
           <Button mt="2" colorScheme="indigo"
           onPress={
 
             handleSignup
-            // password === rePassword  ?
-            //     () => {
-            //         navigation.dispatch(
-            //             CommonActions.reset({
-            //                 index: 1,
-            //                 routes: [
-            //                     { name: "option" },
+            //  password === rePassword  ?
+            //      () => {
+            //          navigation.dispatch(
+            //              CommonActions.reset({
+            //                  index: 1,
+            //                  routes: [
+            //                      { name: "option" },
 
-            //                 ]
-            //             })
-            //         )
-            //     }
+            //                  ]
+            //              })
+            //          )
+            //      }
 
-            //     : console.log("password is incorrect")
+            //      : console.log("password is incorrect")
         }
           >
             Sign up

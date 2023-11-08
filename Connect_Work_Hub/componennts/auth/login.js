@@ -2,13 +2,46 @@ import { useState } from "react"
 import { CommonActions } from '@react-navigation/native';
 import { Box, Text, Heading, VStack, FormControl, Input, Link, Button, HStack, Center, NativeBaseProvider, } from "native-base";
 import { Pressable } from "react-native";
+import axios from "axios";
+
+//  axios.post('https://connect-hub-backend.onrender.com/auth/signin')
+//    .then(response => {
+//      console.log('Response :', response.data);
+
+//    })
+//    .catch(error => {
+//      console.error('Error :', error);
+
+//    });
 
 export default function LogIn({ navigation }) {
-    const [mobile, setMobile] = useState("")
+    // const [mobile, setMobile] = useState("")
     const [password, setPassword] = useState("")
+    const [userName, setUserName] = useState("")
 
-    const userPassword = "1234"
-    const userMobile = "9672932853"
+
+    const handleLogin = async () => {
+
+        try {
+            const response = await axios.post('https://connect-hub-backend.onrender.com/auth/signin', {
+                username: userName,
+                password: password
+            });
+
+            const { token } = response.data
+
+            // localStorage.setItem('token', token);
+            console.log('token', token);
+
+        } catch (error) {
+            console.error('Error logging in:', error);
+            console.log('Error response data:', error.response.data);
+            console.log('Error status:', error.response.status);
+          
+        }
+
+    }
+
 
 
     return (
@@ -31,8 +64,8 @@ export default function LogIn({ navigation }) {
                         <FormControl>
                             <FormControl.Label>Email ID</FormControl.Label>
                             <Input
-                                value={mobile}
-                                onChangeText={(e) => setMobile(e)}
+                                value={userName}
+                                onChangeText={(e) => setUserName(e)}
                             />
                         </FormControl>
                         <FormControl>
@@ -45,22 +78,21 @@ export default function LogIn({ navigation }) {
                         </FormControl>
                         <Button mt="2" colorScheme="indigo"
                             onPress={
-                                mobile === userMobile && password === userPassword ?
-                                    () => {
-                                        navigation.dispatch(
-                                            CommonActions.reset({
-                                                index: 1,
-                                                routes: [
-                                                    { name: "option" },
+                                //     () => {
+                                //         navigation.dispatch(
+                                //             CommonActions.reset({
+                                //                 index: 1,
+                                //                 routes: [
+                                //                     { name: "option" },
 
-                                                ]
-                                            })
-                                        )
-                                    }
+                                //                 ]
+                                //             })
+                                //         )
+                                //     }
 
-                                    : console.log("password is incorrect")
-                            }
-                        >
+                                // }
+                                handleLogin
+                            }>
                             Log in
                         </Button>
                         <HStack mt="6" justifyContent="center">
@@ -108,3 +140,8 @@ export default function LogIn({ navigation }) {
 
 //     },
 // });
+// cc
+// mobile ===mobile && password === password ?
+
+
+// : console.log("password is incorrect")

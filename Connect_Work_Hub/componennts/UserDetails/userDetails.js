@@ -2,27 +2,32 @@
 import { FormControl, Input, Stack, WarningOutlineIcon, Box, NativeBaseProvider, Select, Checkbox, Button } from "native-base";
 import { Text } from "react-native";
 // import { useEffect } from "react";
-import RNPickerSelect from "react-native-picker-select";
+
 
 export default function UserDetails({navigation}) {
 
-    // useEffect(()=>{
-    //     var config = {
-    //         method: 'get',
-    //         url: 'https://api.countrystatecity.in/v1/states',
-    //         headers: {
-    //           'X-CSCAPI-KEY': 'API_KEY'
-    //         }
-    //       };
-
-    //       axios(config)
-    //       .then(function (response) {
-    //         console.log(JSON.stringify(response.data));
-    //       })
-    //       .catch(function (error) {
-    //         console.log(error);
-    //       });
-    // })
+    const handleFirstForm = async () => {
+        try {
+          const response = await axios.post('https://connect-hub-backend.onrender.com/auth/signup', {
+          username:userName,
+          password:password,
+          usertype:userType,
+          name:name,
+          mobile:mobile,
+          alternatemobile:alternateMobile,
+          address:address,
+  state:state,
+  city:city,
+  pinCode:pinCode,
+  gender:gender
+  
+          });
+          console.log('Response:', response.data);
+          // Handle successful response
+        } catch (error) {
+          console.log(error)
+        }
+      }  
 
 
     return (
@@ -62,6 +67,7 @@ export default function UserDetails({navigation}) {
                         </Stack>
                         <Button
                         onPress={()=>{
+                            handleFirstForm
                             navigation.navigate("userExperties")
                         }}
                         >Next</Button>
