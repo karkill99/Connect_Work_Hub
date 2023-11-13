@@ -1,53 +1,68 @@
 import { Button, View, } from "react-native";
 import { CommonActions } from '@react-navigation/native';
-import { useState } from "react";
+
 import axios from "axios";
+// import { useDispatch, useSelector } from "react-redux";
+
+import { useSelector } from "react-redux";
+
 
 export default function Option({ navigation }) {
-    const [userType, setUserType] = useState()
-    let tempId
+
+    const step2 = useSelector((state)=>{
+        return state.Auth
+    })
+
     const handleCustomer = async () => {
         try {
             const response = await axios.post('https://connect-hub-backend.onrender.com/auth/signup/step2', {
-                tempId, 
-                userType:userType,
-
+                // tempId:tempId, 
+                userType:"customer",
+                  
 
             });
-            console.log('Response:', response.data);
+            // console.log('Response:', response.data);
+            if(step2){
 
+                navigation.dispatch(
+                    CommonActions.reset({
+                        index: 3,
+                        routes: [{ name: "userDetails" }]
+                    })
+                )
+            }
         } catch (error) {
             console.log(error)
         }
-        setUserType("customer")
-        console.log(userType)
-        navigation.dispatch(
-            CommonActions.reset({
-                index: 3,
-                routes: [{ name: "customer" }]
-            })
-        )
+        
+   
+        // dispatch(setUserTypeReducer("customer"))
+        
     }
     const handleWorker = async () => {
         try {
             const response = await axios.post('https://connect-hub-backend.onrender.com/auth/signup/step2', {
-                tempId, userType,
+                // tempId:tempId,
+                 userType:"worker",
 
 
             });
-            console.log('Response:', response.data);
+            // console.log('Response:', response.data);
+            if(step2){
 
+                navigation.dispatch(
+                    CommonActions.reset({
+                        index: 4,
+                        routes: [{ name: "userDetails" }]
+                    })
+                )
+            }
         } catch (error) {
             console.log(error)
         }
-        setUserType("worker")
-        console.log(userType)
-        navigation.dispatch(
-            CommonActions.reset({
-                index: 4,
-                routes: [{ name: "userDetails" }]
-            })
-        )
+        
+        // dispatch(setUserTypeReducer("worker"))
+
     }
     return (
         <View >

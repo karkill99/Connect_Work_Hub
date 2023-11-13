@@ -3,24 +3,21 @@ import { CommonActions } from '@react-navigation/native';
 import { Box, Text, Heading, VStack, FormControl, Input, Link, Button, HStack, Center, NativeBaseProvider, } from "native-base";
 import { Pressable } from "react-native";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { setToken, signUpStep1 } from "../../store/slices/authSlice";
 
-//  axios.post('https://connect-hub-backend.onrender.com/auth/signin')
-//    .then(response => {
-//      console.log('Response :', response.data);
-
-//    })
-//    .catch(error => {
-//      console.error('Error :', error);
-
-//    });
 
 export default function LogIn({ navigation }) {
-    // const [mobile, setMobile] = useState("")
+
     const [password, setPassword] = useState("")
     const [userName, setUserName] = useState("")
+    const dispatch = useDispatch()
 
-
+    const step1 = useSelector((state)=>{
+        return state.Auth
+    })
     const handleLogin = async () => {
+
 
         try {
             const response = await axios.post('https://connect-hub-backend.onrender.com/auth/signin', {
@@ -28,16 +25,42 @@ export default function LogIn({ navigation }) {
                 password: password
             });
 
-            const { token } = response.data
+            const { token} = response.data
 
-            // localStorage.setItem('token', token);
+            localStorage.setItem('token', token);
+
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+
             console.log('token', token);
+
+
+            dispatch(setToken(token))
+            
+
+            // const step2Completed = response.data
+
+
+            
+
+            if (step1){
+                navigation.dispatch(
+                    CommonActions.reset({
+                        index: 1,
+                        routes: [
+                            { name: "option" },
+
+                        ]
+                    })
+                )
+
+                }
+
 
         } catch (error) {
             console.error('Error logging in:', error);
             console.log('Error response data:', error.response.data);
             console.log('Error status:', error.response.status);
-          
+
         }
 
     }
@@ -62,7 +85,7 @@ export default function LogIn({ navigation }) {
 
                     <VStack space={3} mt="5">
                         <FormControl>
-                            <FormControl.Label>Email ID</FormControl.Label>
+                            <FormControl.Label>User Name</FormControl.Label>
                             <Input
                                 value={userName}
                                 onChangeText={(e) => setUserName(e)}

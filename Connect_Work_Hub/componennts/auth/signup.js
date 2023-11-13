@@ -1,64 +1,62 @@
-import { useState , useEffect} from "react"
-import { Box, Text, Heading, VStack, FormControl, Input, Link, Button, HStack, Center, NativeBaseProvider, } from "native-base";
-import { Pressable } from "react-native";
-import { CommonActions } from '@react-navigation/native';
+import { useState } from "react"
+import { Box, Text, Heading, VStack, FormControl, Link, Button, HStack, Center, NativeBaseProvider,Input } from "native-base";
+import { Pressable, ActivityIndicator } from "react-native";
+// import { CommonActions } from '@react-navigation/native';
 import axios from "axios";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
+// import { setTempId } from "../../store/slices/workerSlice";
 
 export default function SignUp({navigation}){
-     const [mobile, setMobile] = useState("")
-     const [userName, setUserName] = useState("")
-     const [password, setPassword] = useState("")
-     const [newUser, setNewUser]= useState(false)
-     const dispatch = useDispatch();
-    //  const [rePassword, setRePassword] = useState("")
-// let userType
-// let name
-// let alternateMobile
-// let address
-// let state
-// let city
-// let pinCode
-// let gender
+  const [mobile, setMobile] = useState()
+  const [userName, setUserName] = useState("")
+  const [password, setPassword] = useState("")
+//  const [loading,setLoading] = useState(false)
+    
+     
+   
      const handleSignup = async () => {
       try {
         const response = await axios.post('https://connect-hub-backend.onrender.com/auth/signup/step1', {
         username:userName,
         password:password,
         mobile:mobile,
-        // usertype:userType,
-        // name:name,
-        // alternatemobile:alternateMobile,
-        // address:address,
-        // state:state,
-        // city:city,
-        // pinCode:pinCode,
-        // gender:gender
 
         });
-        if(response) {
-          dispatch({
-            type: 'SIGNUP_STEP_1',
-            payload: response.data.tempId
-          })
-        }
-        console.log('Response:', response.data);
-        setNewUser(true)
-   
+        const {step1Completed} = response.data
+        dispatch(signUpStep1(step1Completed))
+     
+       
+      //   if (mobile && password && userName) {
+      //     navigation.dispatch(
+      //         CommonActions.reset({
+      //             index: 0,
+      //             routes: [{ name: "option" }]
+      //         })
+      //     );
+      // }
+    
+   setLoading(true)
       } catch (error) {
         console.log(error)
       }
     }      
-    useEffect(() => {
-      if (newUser) {
-          navigation.dispatch(
-              CommonActions.reset({
-                  index: 1,
-                  routes: [{ name: "option" }]
-              })
-          );
+
+    const isButtonDisabled = () => {
+     
+      return !(mobile && password && userName)
+      
+    };
+
+
+    const handlePhoneNumberChange = (text) => {
+
+      const cleanedText = text.replace(/[^0-9]/g, '');
+  
+      if (cleanedText.length <= 10) {
+        setMobile(cleanedText);
       }
-  }, [newUser, navigation]);
+    };
+
 
     return(
 <NativeBaseProvider>
@@ -77,9 +75,12 @@ export default function SignUp({navigation}){
         <VStack space={3} mt="5">
           <FormControl>
             <FormControl.Label>Mobile</FormControl.Label>
-            <Input
-            value={mobile} 
-           onChangeText={(e)=> setMobile(e)}
+         
+            <Input 
+            value={mobile}
+            keyboardType="numeric"
+            maxLength={10}
+            onChangeText={handlePhoneNumberChange}
             />
           </FormControl>
           <FormControl>
@@ -96,34 +97,13 @@ export default function SignUp({navigation}){
              onChangeText={(e)=> setPassword(e)}
             />
           </FormControl>
-          {/* <FormControl>
-            <FormControl.Label>Confirm Password</FormControl.Label>
-            <Input type="password" 
-            value={rePassword} 
-            onChangeText={(e)=> setRePassword(e)}
-            />
-          </FormControl> */}
           <Button mt="2" colorScheme="indigo"
-          onPress={
-
-            handleSignup
-            //  password === rePassword  ?
-            //      () => {
-            //          navigation.dispatch(
-            //              CommonActions.reset({
-            //                  index: 1,
-            //                  routes: [
-            //                      { name: "option" },
-
-            //                  ]
-            //              })
-            //          )
-            //      }
-
-            //      : console.log("password is incorrect")
-        }
+          onPress={handleSignup}
+          disabled={isButtonDisabled()}
+         
           >
             Sign up
+          
           </Button>
           <HStack mt="6" justifyContent="center">
                             <Text fontSize="sm" color="coolGray.600" _dark={{

@@ -1,35 +1,30 @@
 
 import { FormControl, Input, Stack, WarningOutlineIcon, Box, NativeBaseProvider, Select, Checkbox, Button } from "native-base";
+import { useState } from "react";
 import { Text } from "react-native";
-// import { useEffect } from "react";
-
 
 export default function UserDetails({navigation}) {
+    const [name,setName] = useState("")
+    const [alternateMobile,setAlternateMobile] = useState("")
+    const [address,setAddress] = useState("")
+    const [state,setState] = useState("")
+    const [city,setCity] = useState("")
+    const [pincode,setPincode] = useState("")
+     const [gender,setGender] = useState("")
+    
 
-    const handleFirstForm = async () => {
-        try {
-          const response = await axios.post('https://connect-hub-backend.onrender.com/auth/signup', {
-          username:userName,
-          password:password,
-          usertype:userType,
-          name:name,
-          mobile:mobile,
-          alternatemobile:alternateMobile,
-          address:address,
-  state:state,
-  city:city,
-  pinCode:pinCode,
-  gender:gender
-  
-          });
-          console.log('Response:', response.data);
-          // Handle successful response
-        } catch (error) {
-          console.log(error)
-        }
-      }  
+const handleUserDetails = async ()=>{
+    try {
+        const response = await axios.post('https://connect-hub-backend.onrender.com/auth/signup/step3', {
+       
 
 
+        });
+    } catch (error) {
+        console.log(error)
+      }
+
+    }
     return (
         <NativeBaseProvider>
             <Box alignItems="center">
@@ -37,37 +32,52 @@ export default function UserDetails({navigation}) {
                     <FormControl isRequired>
                         <Stack mx="4">
                             <FormControl.Label>Submit Your details</FormControl.Label>
-                            <Input type="text" placeholder="Your Name" />
-                            <Input type="number" placeholder="Mobile" />
-                            <Input type="number" placeholder="Alternate Mobile" />
-                            <Input type="text" placeholder="Address" />
-
-                            <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-                                Atleast 6 characters are required.
-                            </FormControl.ErrorMessage>
-                            <Text>Select State</Text>
-                            <Select>
-                                <Select.Item label="Rajasthan" value="rj" />
-                                <Select.Item label="Maharashtra" value="mh" />
-                                <Select.Item label="Assam" value="as" />
-                                <Select.Item label="Delhi" value="dl" />
-                                <Select.Item label="Uttar Pradesh" value="up" />
-
-
-                            </Select>
-                            <Input type="text" placeholder="City / District" />
-                           
-                            <Input type="number" placeholder="Pincode" />
+                            <Input type="text" placeholder="Your Name" 
+                            value={name}
+                             onChangeText={(e)=>{setName(e)}}
+                             />                           
+                            <Input type="number" placeholder="Alternate Mobile"
+                             keyboardType="numeric"
+                             maxLength={10}
+                             value={alternateMobile}
+                             onChangeText={(e)=>{setAlternateMobile(e)}}
+                            />
+                            <Input type="text" placeholder="Address"
+                            value={address}
+                            onChangeText={(e)=>{setAddress(e)}}
+                            />
+                            <Input type="text" placeholder="type state"
+                            value={state}
+                            onChangeText={(e)=>{setState(e)}}
+                            />
+                            <Input type="text" placeholder="City / District" 
+                            value={city}
+                            onChangeText={(e)=>{setCity(e)}}
+                            />
+                            <Input type="number" placeholder="Pincode"
+                             keyboardType="numeric"
+                             maxLength={6}
+                             value={pincode}
+                             onChangeText={(e)=>{setPincode(e)}}
+                            />
                             <Text>Select Gender</Text>
                             
-      <Checkbox value="one" >Male</Checkbox>
-      <Checkbox value="two">Female</Checkbox>
-      <Checkbox value="three">Other</Checkbox>
+      <Checkbox
+      value={gender}
+      onChangeText={(e)=>{setGender(e)}}
+      >Male</Checkbox>
+      <Checkbox 
+     value={gender}
+     onChangeText={(e)=>{setGender(e)}}
+      >Female</Checkbox>
+      <Checkbox value={gender}
+      onChangeText={(e)=>{setGender(e)}}
+      >Other</Checkbox>
     
                         </Stack>
                         <Button
                         onPress={()=>{
-                            handleFirstForm
+                            
                             navigation.navigate("userExperties")
                         }}
                         >Next</Button>
