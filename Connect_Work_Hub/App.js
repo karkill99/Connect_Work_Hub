@@ -18,12 +18,12 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="login" component={LogIn} />
+        <Stack.Screen name="userDetails" component={UserDetails} />
+        <Stack.Screen name="userExperties" component={UserExperties} />
         <Stack.Screen name="signup" component={SignUp} />
         <Stack.Screen name="option" component={Option} />
         <Stack.Screen name="customer" component={Customer} />
         <Stack.Screen name="worker" component={Worker} />
-        <Stack.Screen name="userExperties" component={UserExperties} />
-        <Stack.Screen name="userDetails" component={UserDetails} />
       </Stack.Navigator>
     </NavigationContainer>
     </Provider>

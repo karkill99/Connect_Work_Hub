@@ -7,6 +7,15 @@ const authSlice = createSlice({
         signUpStep1(state,action){
             state.push(action.payload)
         },
+        userIsCustomer(state,action){
+            state.push(action.payload)
+        },
+        userIsWorker(state,action){
+            state.push(action.payload)
+        },
+        setExpertiesReducer(state,action){
+            state.push(action.payload)
+        },
         setToken(state,action){
 state.push(action.payload)
         },
@@ -19,4 +28,4 @@ state.push(action.payload)
     }
 })
 export {authSlice}
-export const {signUpStep1,signUpStep2,signUpStep3,setToken,setUserTypeReducer} = authSlice.actions
+export const {signUpStep1,signUpStep2,signUpStep3,setToken,setUserTypeReducer, setExpertiesReducer,userIsCustomer,userIsWorker} = authSlice.actions

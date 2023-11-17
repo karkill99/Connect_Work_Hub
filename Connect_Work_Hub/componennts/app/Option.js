@@ -4,14 +4,15 @@ import { CommonActions } from '@react-navigation/native';
 import axios from "axios";
 // import { useDispatch, useSelector } from "react-redux";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { signUpStep2, userIsCustomer, userIsWorker } from "../../store/slices/authSlice";
 
 
 export default function Option({ navigation }) {
-
-    const step2 = useSelector((state)=>{
-        return state.Auth
-    })
+const dispatch = useDispatch()
+    // const step2 = useSelector((state)=>{
+    //     return state.Auth
+    // })
 
     const handleCustomer = async () => {
         try {
@@ -21,16 +22,18 @@ export default function Option({ navigation }) {
                   
 
             });
-            // console.log('Response:', response.data);
-            if(step2){
-
+            const {typeOfUser}= response.data
+          
+        
+            
+dispatch(userIsCustomer(typeOfUser))
                 navigation.dispatch(
                     CommonActions.reset({
-                        index: 3,
+                        index: 5,
                         routes: [{ name: "userDetails" }]
                     })
                 )
-            }
+            
         } catch (error) {
             console.log(error)
         }
@@ -48,15 +51,14 @@ export default function Option({ navigation }) {
 
             });
             // console.log('Response:', response.data);
-            if(step2){
-
+           dispatch(userIsWorker("worker"))
                 navigation.dispatch(
                     CommonActions.reset({
-                        index: 4,
+                        index: 5,
                         routes: [{ name: "userDetails" }]
                     })
                 )
-            }
+            
         } catch (error) {
             console.log(error)
         }

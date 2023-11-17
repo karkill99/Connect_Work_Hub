@@ -4,7 +4,7 @@ import { Box, Text, Heading, VStack, FormControl, Input, Link, Button, HStack, C
 import { Pressable } from "react-native";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setToken, signUpStep1 } from "../../store/slices/authSlice";
+import { setToken,} from "../../store/slices/authSlice";
 
 
 export default function LogIn({ navigation }) {
@@ -16,6 +16,13 @@ export default function LogIn({ navigation }) {
     const step1 = useSelector((state)=>{
         return state.Auth
     })
+    const step2 = useSelector((state)=>{
+        return state.Auth
+    })
+    const step3 = useSelector((state)=>{
+        return state.Auth
+    })
+
     const handleLogin = async () => {
 
 
@@ -27,34 +34,22 @@ export default function LogIn({ navigation }) {
 
             const { token} = response.data
 
-            localStorage.setItem('token', token);
-
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
             console.log('token', token);
 
-
+            console.log(step1)
             dispatch(setToken(token))
-            
-
-            // const step2Completed = response.data
-
-
-            
-
-            if (step1){
-                navigation.dispatch(
-                    CommonActions.reset({
-                        index: 1,
-                        routes: [
-                            { name: "option" },
-
-                        ]
-                    })
-                )
-
-                }
-
+          
+            navigation.dispatch(
+                CommonActions.reset({
+                    index: 2,
+                    routes: [
+                        { name: "option" },
+        
+                    ]
+                })
+            )
 
         } catch (error) {
             console.error('Error logging in:', error);
