@@ -1,7 +1,11 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const ProfileScreen = () => {
+  const [myData,setMyData] = useState("")
   const customer = {
     name: "Faizan Sayed",
     imageSource: require("../profile/images.jpg"),
@@ -13,6 +17,38 @@ const ProfileScreen = () => {
     },
     skills: ["Customer Relations", "Quality Service", "Loyal Client"],
   };
+  const token = useSelector((state)=>state.Auth[0])
+ const userType = useSelector((state)=>state.Auth[1])
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await fetch('https://connect-hub-backend.onrender.com/requests/list/worker1', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setMyData(data);
+      console.log(data)
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  if (token) {
+    fetchData();
+  }
+}, [token]); 
+
+console.log(myData)
 
   return (
     <View style={styles.profileContainer}>

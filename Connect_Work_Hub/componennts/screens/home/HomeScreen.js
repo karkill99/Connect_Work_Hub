@@ -1,7 +1,12 @@
-import React from "react";
+// import axios from "axios";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+// import React from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 
 const HomeScreen = () => {
+   const [myData,setMyData] = useState("")
   const works = [
     {
       id: "1",
@@ -40,10 +45,42 @@ const HomeScreen = () => {
       workerName: "David Wilson",
     },
   ];
+const token = useSelector((state)=>state.Auth[0])
+ const userType = useSelector((state)=>state.Auth[1])
 
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await fetch('https://connect-hub-backend.onrender.com/dashboard/worker', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setMyData(data);
+      console.log(data)
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  if (token) {
+    fetchData();
+  }
+}, [token]); 
+console.log(myData[0])
+// const postData = myData[0].mobile
+// console.log(postData)
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.headerText}>Services For You</Text>
       </View>
       <FlatList
@@ -59,7 +96,11 @@ const HomeScreen = () => {
             <Text style={styles.workerName}>Worker: {item.workerName}</Text>
           </View>
         )}
-      />
+      /> */}
+      {userType==="worker"?
+    <Text>this is worker side</Text>:
+    <Text>this is customer side</Text> 
+    }
     </View>
   );
 };
@@ -69,39 +110,39 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
   },
-  header: {
-    backgroundColor: "#007AFF",
-    padding: 20,
-  },
-  headerText: {
-    color: "#fff",
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  workItem: {
-    padding: 10,
-    margin: 10,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-  },
-  workTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  workDescription: {
-    fontSize: 16,
-    color: "gray",
-  },
-  visitingCharge: {
-    fontSize: 14,
-    color: "#333",
-  },
-  workerName: {
-    fontSize: 14,
-    color: "#333",
-  },
+  // header: {
+  //   backgroundColor: "#007AFF",
+  //   padding: 20,
+  // },
+  // headerText: {
+  //   color: "#fff",
+  //   fontSize: 24,
+  //   fontWeight: "bold",
+  //   textAlign: "center",
+  // },
+  // workItem: {
+  //   padding: 10,
+  //   margin: 10,
+  //   borderWidth: 1,
+  //   borderColor: "#ccc",
+  //   borderRadius: 5,
+  // },
+  // workTitle: {
+  //   fontSize: 18,
+  //   fontWeight: "bold",
+  // },
+  // workDescription: {
+  //   fontSize: 16,
+  //   color: "gray",
+  // },
+  // visitingCharge: {
+  //   fontSize: 14,
+  //   color: "#333",
+  // },
+  // workerName: {
+  //   fontSize: 14,
+  //   color: "#333",
+  // },
 });
 
 export default HomeScreen;

@@ -1,18 +1,13 @@
 import { useState } from "react"
 import { Box, Text, Heading, VStack, FormControl, Link, Button, HStack, Center, NativeBaseProvider,Input } from "native-base";
-import { Pressable, ActivityIndicator } from "react-native";
-// import { CommonActions } from '@react-navigation/native';
+import { Pressable,} from "react-native";
 import axios from "axios";
-// import { useDispatch } from "react-redux";
-// import { setTempId } from "../../store/slices/workerSlice";
 
 export default function SignUp({navigation}){
   const [mobile, setMobile] = useState()
   const [userName, setUserName] = useState("")
   const [password, setPassword] = useState("")
-//  const [loading,setLoading] = useState(false)
-    
-     
+const [userCreated,setUserCreated] = useState(false)
    
      const handleSignup = async () => {
       try {
@@ -22,20 +17,8 @@ export default function SignUp({navigation}){
         mobile:mobile,
 
         });
-        const {step1Completed} = response.data
-        dispatch(signUpStep1(step1Completed))
+        setUserCreated(true)
      
-       
-      //   if (mobile && password && userName) {
-      //     navigation.dispatch(
-      //         CommonActions.reset({
-      //             index: 0,
-      //             routes: [{ name: "option" }]
-      //         })
-      //     );
-      // }
-    
-   setLoading(true)
       } catch (error) {
         console.log(error)
       }
@@ -125,30 +108,9 @@ export default function SignUp({navigation}){
                         </HStack>
         </VStack>
       </Box>
+    
     </Center>;
 </NativeBaseProvider>
 
     )
 }
-
-// const style = StyleSheet.create({
-//     input: {
-//       borderWidth: 1,
-//       borderColor: "gray",
-//       marginBottom: 10,
-//       padding: 10,
-//       borderRadius: 5,
-      
-//     },
-//     label: {
-//       fontSize: 10,
-//       fontWeight: "bold",
-//     },
-//     signUpPage: {
-//       backgroundColor: "white",
-//       flex: 1,
-//       padding: 20,
-//        paddingTop:200,
-
-//     },
-//   });

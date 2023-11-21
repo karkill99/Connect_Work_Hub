@@ -9,6 +9,7 @@ const authSlice = createSlice({
         },
         userIsCustomer(state,action){
             state.push(action.payload)
+           
         },
         userIsWorker(state,action){
             state.push(action.payload)

@@ -4,7 +4,7 @@ import { Box, Text, Heading, VStack, FormControl, Input, Link, Button, HStack, C
 import { Pressable } from "react-native";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setToken,} from "../../store/slices/authSlice";
+import { setToken, setUserTypeReducer, } from "../../store/slices/authSlice";
 
 
 export default function LogIn({ navigation }) {
@@ -12,16 +12,6 @@ export default function LogIn({ navigation }) {
     const [password, setPassword] = useState("")
     const [userName, setUserName] = useState("")
     const dispatch = useDispatch()
-
-    const step1 = useSelector((state)=>{
-        return state.Auth
-    })
-    const step2 = useSelector((state)=>{
-        return state.Auth
-    })
-    const step3 = useSelector((state)=>{
-        return state.Auth
-    })
 
     const handleLogin = async () => {
 
@@ -32,24 +22,94 @@ export default function LogIn({ navigation }) {
                 password: password
             });
 
-            const { token} = response.data
-
+            const { token, step2Completed, step3Completed, userType } = response.data
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
             console.log('token', token);
-
-            console.log(step1)
             dispatch(setToken(token))
-          
-            navigation.dispatch(
-                CommonActions.reset({
-                    index: 2,
-                    routes: [
-                        { name: "option" },
-        
-                    ]
-                })
-            )
+
+            // const customer = await axios.get("https://connect-hub-backend.onrender.com/dashboard/customer")
+            // const data = customer.data
+            // const type = data.map((item) => item.userType)
+            // const userType = type[0]
+            // console.log(data)
+            // console.log(type)
+            // console.log(userType)
+dispatch(setUserTypeReducer(userType))
+
+            if (step3Completed === true && step2Completed === true) {
+                if (userType === "customer") {
+
+                    navigation.dispatch(
+                        CommonActions.reset({
+                            index: 0,
+                            routes: [
+                                { name: "customer" },
+
+                            ]
+                        })
+                    )
+                } else {
+                    navigation.dispatch(
+                        CommonActions.reset({
+                            index: 0,
+                            routes: [
+                                { name: "worker" },
+
+                            ]
+                        })
+                    )
+
+                }
+            }
+            else if (step3Completed === true  ) {
+                if(userType === "customer"){
+
+                    navigation.dispatch(
+                        CommonActions.reset({
+                            index: 0,
+                            routes: [
+                                { name: "userDetailsForCustomer" },
+    
+                            ]
+                        })
+                    )
+                }else{
+                    navigation.dispatch(
+                        CommonActions.reset({
+                            index: 0,
+                            routes: [
+                                { name: "userDetailsForWorker" },
+    
+                            ]
+                        })
+                    )
+                }
+
+            } else if (step2Completed === true) {
+                navigation.dispatch(
+                    CommonActions.reset({
+                        index: 0,
+                        routes: [
+                            { name: "option" },
+
+                        ]
+                    })
+                )
+
+            } else {
+                navigation.dispatch(
+                    CommonActions.reset({
+                        index: 0,
+                        routes: [
+                            { name: "option" },
+
+                        ]
+                    })
+                )
+            }
+
+
 
         } catch (error) {
             console.error('Error logging in:', error);
@@ -94,25 +154,13 @@ export default function LogIn({ navigation }) {
                             />
 
                         </FormControl>
-                        <Button mt="2" colorScheme="indigo"
-                            onPress={
-                                //     () => {
-                                //         navigation.dispatch(
-                                //             CommonActions.reset({
-                                //                 index: 1,
-                                //                 routes: [
-                                //                     { name: "option" },
+                        <Pressable>
 
-                                //                 ]
-                                //             })
-                                //         )
-                                //     }
-
-                                // }
-                                handleLogin
-                            }>
-                            Log in
-                        </Button>
+                            <Button mt="2" colorScheme="indigo"
+                                onPress={handleLogin}>
+                                Log in
+                            </Button>
+                        </Pressable>
                         <HStack mt="6" justifyContent="center">
                             <Text fontSize="sm" color="coolGray.600" _dark={{
                                 color: "warmGray.200"

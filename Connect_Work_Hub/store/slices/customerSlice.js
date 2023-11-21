@@ -4,7 +4,8 @@ const customerSlice = createSlice({
     name: "customer",
     initialState:[],
     reducers: {
-        iAmCustomer(state,action){}
+        iAmCustomer(state,action){},
+        
 
     }
 })

@@ -1,13 +1,3 @@
-// import { View, Text } from "react-native";
-
-// export default function Notify() {
-//   return (
-//     <View>
-//       <Text>Notification</Text>
-//     </View>
-//   );
-// }
-
 import React from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
 

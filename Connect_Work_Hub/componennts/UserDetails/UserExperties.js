@@ -1,22 +1,12 @@
 import { VStack, Box, NativeBaseProvider, HStack, Text, Button, Checkbox, Heading } from "native-base";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setExpertiesReducer } from "../../store/slices/authSlice";
 import { CommonActions } from "@react-navigation/native";
 import axios from "axios";
+
 export default function UserExperties({ navigation }) {
 
   const [experties, setExperties] = useState([])
 
-// const dispatch = useDispatch()
-// const customer = useSelector((state)=>{
-//   return state.auth.customer
-// })
-// const worker = useSelector((state)=>{
-//   return state.auth.worker
-// })
-//  dispatch(setExpertiesReducer(experties))
-  console.log(experties)
   
 const handleExperties = async()=>{
 try{
@@ -60,9 +50,7 @@ console.log(error)
             </Checkbox.Group>;
           </VStack>
         </HStack>
-        <Button onPress={
-
-       handleExperties }>Done</Button>
+        <Button onPress={ handleExperties }>Done</Button>
       </Box>;
 
     </NativeBaseProvider>
